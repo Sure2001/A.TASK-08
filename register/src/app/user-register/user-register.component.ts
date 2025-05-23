@@ -1,17 +1,26 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; // 👈 Import HttpClient
+import { HttpClient } from '@angular/common/http';
+import { trigger, transition, style, animate } from '@angular/animations'; // ✅ Import animations
 
 @Component({
   selector: 'app-userregister',
   templateUrl: './user-register.component.html',
   styleUrls: ['./user-register.component.css'],
+  animations: [ // ✅ Fix animation block
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-20px)' }),
+        animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class UserRegisterComponent {
   registerForm: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {  // 👈 Inject HttpClient
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.registerForm = this.fb.group(
       {
         name: ['', Validators.required],
@@ -58,7 +67,6 @@ export class UserRegisterComponent {
 
     const formData = this.registerForm.value;
 
-    // 🔥 POST to backend API
     this.http.post('http://localhost:5000/api/register', formData).subscribe({
       next: (res) => {
         console.log('Form Submitted:', res);

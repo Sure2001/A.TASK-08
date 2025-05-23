@@ -7,6 +7,6 @@ const userSchema = new mongoose.Schema({
   dob: { type: Date, required: true },
   password: { type: String, required: true },
   acceptTerms: { type: Boolean, required: true },
-},{ timestamps: true });
+});
 
 module.exports = mongoose.model('User', userSchema);
